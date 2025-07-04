@@ -6,7 +6,7 @@ Neste projeto foi feita a criação de testes para a API "Rethink Bank Test" usa
 
 a- Há bugs? Se sim, quais são e quais são os cenários esperados? Sim, os bugs encontrados foram:
 
-1. No endpoint `/caixinha/deposit` o depósito não está sendo realizado de fato, verificando o código do enpoint conclui que o problema pode estar relacionado a linha `701` que apenas seleciona "normal_balance" e não seleciona "piggy_bank_balance" que é usado na linha `707`. No caso de teste abaixo, ao tentar fazer o resgate, o bug foi acusado.
+1. No endpoint `/caixinha/deposit` o depósito não está sendo realizado de fato, verificando o código do endpoint conclui que o problema pode estar relacionado a linha `701` que apenas seleciona "normal_balance" e não seleciona "piggy_bank_balance" que é usado na linha `707`. No caso de teste abaixo, ao tentar fazer o resgate, o bug foi acusado.
 
 - Dado que o usuário está autenticado, Quando enviar valor válido, Então deve sinalizar que o resgate foi realizado e status 200
 
