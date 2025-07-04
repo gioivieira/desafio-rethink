@@ -8,45 +8,30 @@ const password = 'Senha@123'
 let token
 
 afterAll(async () => {
-    try {
-        await axios.delete(`${BASE_URL}/account`, {
-            headers: {
-                Authorization: `Bearer ${token}`
-            },
-            data: {
-                password: password
-            }
-        })
-    } catch (error) {
-        console.error(error.response.data.error)
-        throw error
-    }
+    await axios.delete(`${BASE_URL}/account`, {
+        headers: {
+            Authorization: `Bearer ${token}`
+        },
+        data: {
+            password: password
+        }
+    })
 })
 describe('Casos de testes para "Cadastro de Usuário"', () => {
-    expect.assertions(3)
     test('Dado que o usuário ainda não existe, Quando enviar valores válidos, Então deve sinalizar cadastro realizado com sucesso, trazer token e status 201', async () => {
-        try {
-            const response = await axios.post(`${BASE_URL}/cadastro`, {
-                "cpf": cpf,
-                "full_name": "Maria Silva",
-                "email": email,
-                "password": password,
-                "confirmPassword": password
-            })
+        const response = await axios.post(`${BASE_URL}/cadastro`, {
+            "cpf": cpf,
+            "full_name": "Maria Silva",
+            "email": email,
+            "password": password,
+            "confirmPassword": password
+        })
 
-            token = response.data.confirmToken
+        token = response.data.confirmToken
 
-            console.log(email)
-            console.log(response.status)
-            console.log(response.data.message)
-            console.log(response.data.confirmToken)
-            expect(response.status).toBe(201)
-            expect(response.data.message).toBe('Cadastro realizado com sucesso.')
-            expect(response.data).toHaveProperty('confirmToken')
-        } catch (error) {
-            console.error(error.response.data.error)
-            throw error
-        }
+        expect(response.status).toBe(201)
+        expect(response.data.message).toBe('Cadastro realizado com sucesso.')
+        expect(response.data).toHaveProperty('confirmToken')
     })
     test('Dado que o usuário ainda não existe, Quando enviar senha e confirmação de senha diferentes, Então deve sinalizar que senhas não conferem e status 400', async () => {
         expect.assertions(2)
@@ -60,10 +45,8 @@ describe('Casos de testes para "Cadastro de Usuário"', () => {
                 "confirmPassword": "Senha@123456"
             })
         } catch (error) {
-            console.error(error.status)
-            console.error(error.response.data.error)
-            expect(error.status).toBe(400)
-            expect(error.response.data.error).toBe('Senhas não conferem')
+            expect(error?.status).toBe(400)
+            expect(error?.response?.data?.error).toBe('Senhas não conferem')
         }
     })
     test('Dado que o usuário existe, Quando enviar email, Então deve sinalizar email já existente e status 400', async () => {
@@ -78,10 +61,8 @@ describe('Casos de testes para "Cadastro de Usuário"', () => {
                 "confirmPassword": "Senha@123"
             })
         } catch (error) {
-            console.error(error.status)
-            console.error(error.response.data.error)
-            expect(error.status).toBe(400)
-            expect(error.response.data.error).toBe('duplicate key value violates unique constraint \"users_email_key\"')
+            expect(error?.status).toBe(400)
+            expect(error?.response?.data?.error).toBe('duplicate key value violates unique constraint \"users_email_key\"')
         }
     })
     test('Dado que o usuário existe, Quando enviar cpf, Então deve sinalizar cpj já existente e status 400', async () => {
@@ -96,10 +77,8 @@ describe('Casos de testes para "Cadastro de Usuário"', () => {
                 "confirmPassword": "Senha@123"
             })
         } catch (error) {
-            console.error(error.status)
-            console.error(error.response.data.error)
-            expect(error.status).toBe(400)
-            expect(error.response.data.error).toBe('duplicate key value violates unique constraint \"users_cpf_key\"')
+            expect(error?.status).toBe(400)
+            expect(error?.response?.data?.error).toBe('duplicate key value violates unique constraint \"users_cpf_key\"')
         }
     })
     test('Dado que o usuário ainda não existe, Quando enviar senha fraca, Então deve sinalizar senha fraca e status 400', async () => {
@@ -114,10 +93,8 @@ describe('Casos de testes para "Cadastro de Usuário"', () => {
                 "confirmPassword": "SenhaFraca"
             })
         } catch (error) {
-            console.error(error.status)
-            console.error(error.response.data.error)
-            expect(error.status).toBe(400)
-            expect(error.response.data.error).toBe('Senha fraca')
+            expect(error?.status).toBe(400)
+            expect(error?.response?.data?.error).toBe('Senha fraca')
         }
     })
     test('Dado que o usuário ainda não existe, Quando enviar cpf inválido, Então deve sinalizar CPF inválido e status 400', async () => {
@@ -132,10 +109,8 @@ describe('Casos de testes para "Cadastro de Usuário"', () => {
                 "confirmPassword": "Teste@123"
             })
         } catch (error) {
-            console.error(error.status)
-            console.error(error.response.data.error)
-            expect(error.status).toBe(400)
-            expect(error.response.data.error).toBe('CPF inválido')
+            expect(error?.status).toBe(400)
+            expect(error?.response?.data?.error).toBe('CPF inválido')
         }
     })
     test('Dado que o usuário ainda não existe, Quando enviar nome incompleto, Então deve sinalizar obrigatoriedade de nome completo e status 400', async () => {
@@ -150,10 +125,8 @@ describe('Casos de testes para "Cadastro de Usuário"', () => {
                 "confirmPassword": "Teste@123"
             })
         } catch (error) {
-            console.error(error.status)
-            console.error(error.response.data.error)
-            expect(error.status).toBe(400)
-            expect(error.response.data.error).toBe('Nome completo obrigatório')
+            expect(error?.status).toBe(400)
+            expect(error?.response?.data?.error).toBe('Nome completo obrigatório')
         }
     })
 })

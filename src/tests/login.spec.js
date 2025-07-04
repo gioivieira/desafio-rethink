@@ -8,59 +8,37 @@ const password = 'Senha@789'
 let token
 
 beforeAll(async () => {
-    try {
-        const response = await axios.post(`${BASE_URL}/cadastro`, {
-            "cpf": cpf,
-            "full_name": "Giovana Vieira",
-            "email": email,
-            "password": password,
-            "confirmPassword": password
-        })
+    const response = await axios.post(`${BASE_URL}/cadastro`, {
+        "cpf": cpf,
+        "full_name": "Giovana Vieira",
+        "email": email,
+        "password": password,
+        "confirmPassword": password
+    })
 
-        token = response.data.confirmToken
+    token = response.data.confirmToken
 
-        await axios.get(`${BASE_URL}/confirm-email?token=${token}`)
-    } catch (error) {
-        console.error(error.response.data.error)
-        throw error
-    }
+    await axios.get(`${BASE_URL}/confirm-email?token=${token}`)
 })
 afterAll(async () => {
-    try {
-        await axios.delete(`${BASE_URL}/account`, {
-            headers: {
-                Authorization: `Bearer ${token}`
-            },
-            data: {
-                "password": password
-            }
-        })
-    } catch (error) {
-        console.error(error.response.data.error)
-        throw error
-    }
+    await axios.delete(`${BASE_URL}/account`, {
+        headers: {
+            Authorization: `Bearer ${token}`
+        },
+        data: {
+            "password": password
+        }
+    })
 })
 describe('Casos de testes para "Login"', () => {
     test('Dado que o usuário existe, Quando enviar valores válidos, Então deve informar o token e status 200', async () => {
-        expect.assertions(2)
+        const response = await axios.post(`${BASE_URL}/login`, {
+            "email": email,
+            "password": password
+        })
 
-        try {
-            console.log(email)
-            console.log(token)
-
-            const response = await axios.post(`${BASE_URL}/login`, {
-                "email": email,
-                "password": password
-            })
-
-            console.log(response.status)
-            console.log(response.data)
-            expect(response.status).toBe(200)
-            expect(response.data).toHaveProperty('token')
-        } catch (error) {
-            console.error(error.response.data.error)
-            throw error
-        }
+        expect(response.status).toBe(200)
+        expect(response.data).toHaveProperty('token')
     })
     test('Dado que o usuário não existe, Quando enviar valores inválidos, Então deve sinalizar que credenciais são inválidas e status 400', async () => {
         expect.assertions(2)
@@ -71,10 +49,8 @@ describe('Casos de testes para "Login"', () => {
                 "password": "Senha@1234"
             })
         } catch (error) {
-            console.error(error.status)
-            console.error(error.response.data.error)
-            expect(error.status).toBe(400)
-            expect(error.response.data.error).toBe('Credenciais inválidas')
+            expect(error?.status).toBe(400)
+            expect(error?.response?.data?.error).toBe('Credenciais inválidas')
         }
     })
 
@@ -87,10 +63,8 @@ describe('Casos de testes para "Login"', () => {
                 "password": "Senha@1234"
             })
         } catch (error) {
-            console.error(error.status)
-            console.error(error.response.data.error)
-            expect(error.status).toBe(403)
-            expect(error.response.data.error).toBe('E-mail não confirmado')
+            expect(error?.status).toBe(403)
+            expect(error?.response?.data?.error).toBe('E-mail não confirmado')
         }
     })
 })
