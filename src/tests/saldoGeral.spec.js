@@ -8,57 +8,38 @@ const password = 'Senha@1345'
 let token
 
 beforeAll(async () => {
-    try {
-        const response = await axios.post(`${BASE_URL}/cadastro`, {
-            "cpf": cpf,
-            "full_name": "Tania Rocha",
-            "email": email,
-            "password": password,
-            "confirmPassword": password
-        })
+    const response = await axios.post(`${BASE_URL}/cadastro`, {
+        "cpf": cpf,
+        "full_name": "Tania Rocha",
+        "email": email,
+        "password": password,
+        "confirmPassword": password
+    })
 
-        token = response.data.confirmToken
-    } catch (error) {
-        console.error(error.response.data.error)
-        throw error
-    }
+    token = response.data.confirmToken
 })
 afterAll(async () => {
-    try {
-        await axios.delete(`${BASE_URL}/account`, {
-            headers: {
-                Authorization: `Bearer ${token}`
-            },
-            data: {
-                "password": password
-            }
-        })
-    } catch (error) {
-        console.error(error.response.data.error)
-        throw error
-    }
+    await axios.delete(`${BASE_URL}/account`, {
+        headers: {
+            Authorization: `Bearer ${token}`
+        },
+        data: {
+            "password": password
+        }
+    })
 })
 describe('Casos de testes para "Saldo Geral"', () => {
     test('Dado que o usuário está autenticado, Quando enviar a autenticação, Então deve trazer um objeto com campos específicos e status 200', async () => {
-        expect.assertions(2)
+        const response = await axios.get(`${BASE_URL}/points/saldo`, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        })
 
-        try {
-            const response = await axios.get(`${BASE_URL}/points/saldo`, {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            })
-
-            console.log(response.status)
-            console.log(response.data)
-            expect(response.status).toBe(200)
-            expect(response.data).toMatchObject({
-                "normal_balance": expect.any(Number),
-                "piggy_bank_balance": expect.any(Number)
-            })
-        } catch (error) {
-            console.error(error.response.data.error)
-            throw error
-        }
+        expect(response.status).toBe(200)
+        expect(response.data).toMatchObject({
+            "normal_balance": expect.any(Number),
+            "piggy_bank_balance": expect.any(Number)
+        })
     })
 })
