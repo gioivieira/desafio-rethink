@@ -1,6 +1,6 @@
 # Testes de API (Rethink Bank Test)
 
-Neste projeto foi feita a criação de testes para a API "Rethink Bank Test" usando Jest. Os testes podem ser rodados isoladamente ou em conjunto e os resultados são evidenciados em `test-report.html`. Abaixo farei o apontamento de alguns bugs e possíveis melhorias na API.
+Neste projeto foi feita a criação de testes para a API "Rethink Bank Test" usando Jest. Os resultados dos testes são evidenciados em `test-report.html`. Abaixo farei o apontamento de alguns bugs e possíveis melhorias na API.
 
 # Perguntas
 
@@ -44,20 +44,16 @@ Não, diante dos bugs encontrados é melhor que correções sejam realizadas ant
 
 - <a href="https://github.com/gioivieira" target="_blank"><p>Giovana Inez Vieira</p></a>
 
-## Estrutura dos Testes
-
-- **`src/`**: Contém o código fonte do projeto.
-  - **`tests/`**: Testes automatizados.
-    - `cadastroDeUsuario.spec.js`: Testes para o endpoint de cadastro de usuário.
-    - `caixinhaDePontos.spec.js`: Testes para o endpoint de caixinha de pontos.
-    - `confirmacaoDeEmail.spec.js`: Testes para o endpoint de confirmação de e-mail.
-    - `enviarPontos.spec.js`: Testes para o endpoint de enviar pontos.
-    - `excluirConta.spec.js`: Testes para o endpoint de excluir conta.
-    - `extratoDePontos.spec.js`: Testes para o endpoint de extrato de pontos.
-    - `login.spec.js`: Testes para o endpoint de login.
-    - `saldoGeral.spec.js`: Testes para o endpoint de saldo geral.
-
 ## Como Executar o Projeto
+
+### Configuração do .env
+
+Antes de rodar os testes, é necessário criar um arquivo `.env` com base no `.env.example` fornecido no projeto. Altere os valores conforme a necessidade e descrição das variáveis no arquivo.
+
+1. Copie o arquivo `.env.example` para `.env`:
+```bash
+   cp .env.example .env
+```
 
 ### Pré-requisitos
 
@@ -84,8 +80,3 @@ Não, diante dos bugs encontrados é melhor que correções sejam realizadas ant
 ```
 
 Isso fará o npm install e rodará todos os testes da pasta src/tests/.
-
-- Ou use o comando abaixo para executar os testes de um arquivo específico:
-```bash
-   npm test cadastroDeUsuario.spec.js
-```
